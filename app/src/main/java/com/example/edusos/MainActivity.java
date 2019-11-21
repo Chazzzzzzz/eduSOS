@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 };
                 QuestionsRef.addValueEventListener(valueEventListener);
                 //tv_main_searchResult.setText(searchResult);
+                et_main_searchTerm.setText("");
 
                 break;
             case R.id.btn_main_QandA:
