@@ -9,6 +9,7 @@ import android.content.Context;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -66,32 +68,33 @@ public class AskExpertActivity extends AppCompatActivity {
 
         Query firebaseSearchQuery = mUserDatabase.orderByChild("name").startAt(searchText).endAt(searchText + "\uf8ff");
 
-        FirebaseRecyclerAdapter<Experts, ExpertsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Experts, ExpertsViewHolder>(
+        FirebaseRecyclerOptions<Expert> options =
+                new FirebaseRecyclerOptions.Builder<Expert>()
+                        .setQuery(firebaseSearchQuery, Expert.class)
+                        .build();
+        FirebaseRecyclerAdapter firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Expert, ExpertsViewHolder>(options) {
 
-//                Experts.class,
-//                R.layout.online_expert,
-//                ExpertsViewHolder.class,
-//                firebaseSearchQuery
-
-        ) {
             @NonNull
             @Override
             public ExpertsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return null;
-            }
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.online_expert, parent, false);
+
+                return new ExpertsViewHolder(view);            }
 
 
             @Override
-            protected void onBindViewHolder(ExpertsViewHolder viewHolder, int position, Experts model) {
+            protected void onBindViewHolder(ExpertsViewHolder viewHolder, int position, Expert model) {
 
 
-                viewHolder.setDetails(getApplicationContext(), model.getName(), model.getOnline(), model.getPhone(),
-                        model.getRate(), model.getQA(), model.getSubjects());
+                viewHolder.setDetails(getApplicationContext(), model.getName(), model.getOnline().toString(), model.getPhone(),
+                        model.getRating().toString(), Integer.toString(model.getQuestionsAnswered()), model.getSubjects().toString());
 
             }
         };
 
         mResultList.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.startListening();
 
     }
 
@@ -115,7 +118,6 @@ public class AskExpertActivity extends AppCompatActivity {
             TextView expert_rate = (TextView) mView.findViewById(R.id.rate_text);
             TextView expert_question_answered = (TextView) mView.findViewById(R.id.question_answered_text);
             TextView expert_subjects = (TextView) mView.findViewById(R.id.subject_text);
-//            ImageView user_image = (ImageView) mView.findViewById(R.id.profile_image);
 
 
             expert_name.setText(expertName);
@@ -124,8 +126,6 @@ public class AskExpertActivity extends AppCompatActivity {
             expert_rate.setText(expertRate);
             expert_question_answered.setText(expertQA);
             expert_subjects.setText(expertSubjects);
-
-//            Glide.with(ctx).load(userImage).into(user_image);
 
 
         }

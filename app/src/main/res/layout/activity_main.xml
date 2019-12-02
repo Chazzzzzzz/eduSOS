@@ -42,6 +42,7 @@
             android:layout_marginEnd="24dp"
             android:background="@drawable/ic_chatbutton"
             android:gravity="center_vertical|center_horizontal"
+            android:onClick="onFindExpertsClick"
             app:layout_constraintBottom_toTopOf="@+id/textView6"
             app:layout_constraintEnd_toEndOf="parent" />
 

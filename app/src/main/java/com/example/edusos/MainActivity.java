@@ -144,4 +144,10 @@ public class MainActivity extends AppCompatActivity {
         this.startActivity(myIntent);
 
     }
+
+    public void onFindExpertsClick(View view) {
+        Intent myIntent = new Intent(this, AskExpertActivity.class);
+        this.startActivity(myIntent);
+
+    }
 }
