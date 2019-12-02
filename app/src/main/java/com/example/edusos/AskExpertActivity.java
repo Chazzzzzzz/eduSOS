@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
+
 public class AskExpertActivity extends AppCompatActivity {
 
     private EditText mSearchField;
@@ -72,7 +74,9 @@ public class AskExpertActivity extends AppCompatActivity {
                 new FirebaseRecyclerOptions.Builder<Expert>()
                         .setQuery(firebaseSearchQuery, Expert.class)
                         .build();
-        FirebaseRecyclerAdapter firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Expert, ExpertsViewHolder>(options) {
+
+        final FirebaseRecyclerAdapter firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Expert, ExpertsViewHolder>(options) {
+            ArrayList<Expert> expertList;
 
             @NonNull
             @Override
@@ -85,12 +89,10 @@ public class AskExpertActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(ExpertsViewHolder viewHolder, int position, Expert model) {
-
-
                 viewHolder.setDetails(getApplicationContext(), model.getName(), model.getOnline().toString(), model.getPhone(),
                         model.getRating().toString(), Integer.toString(model.getQuestionsAnswered()), model.getSubjects().toString());
-
             }
+
         };
 
         mResultList.setAdapter(firebaseRecyclerAdapter);

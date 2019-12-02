@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:behavior_hideable="false"
-    app:behavior_peekHeight="100dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    android:layout_height="match_parent">
+<!--    app:behavior_hideable="false"-->
+<!--    app:behavior_peekHeight="100dp"-->
+<!--    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">-->
 
     <TextView
         android:id="@+id/online_text"
@@ -65,7 +65,6 @@
         android:id="@+id/subject_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/phone_text"
         android:layout_alignParentStart="true"
         android:layout_marginStart="1dp"
         android:layout_marginTop="25dp"
