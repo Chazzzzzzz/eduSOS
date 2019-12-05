@@ -39,6 +39,8 @@ public class LogInSignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in_sign_up);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         dbExperts = FirebaseDatabase.getInstance().getReference("Experts");
     }

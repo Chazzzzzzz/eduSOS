@@ -30,6 +30,8 @@ public class RegisterExpertActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_expert);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         dbExperts = FirebaseDatabase.getInstance().getReference("Experts");
 
         editTextName = (EditText) findViewById(R.id.editTextName);

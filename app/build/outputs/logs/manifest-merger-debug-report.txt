@@ -100,7 +100,7 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/clar
 	android:supportsRtl
 		ADDED from /Users/clarkpalmer/Development/eduSOS/app/src/main/AndroidManifest.xml:12:9-35
 	android:label
-		ADDED from /Users/clarkpalmer/Development/eduSOS/app/src/main/AndroidManifest.xml:10:9-41
+		ADDED from /Users/clarkpalmer/Development/eduSOS/app/src/main/AndroidManifest.xml:10:9-46
 	tools:ignore
 		ADDED from /Users/clarkpalmer/Development/eduSOS/app/src/main/AndroidManifest.xml:14:9-48
 	android:roundIcon

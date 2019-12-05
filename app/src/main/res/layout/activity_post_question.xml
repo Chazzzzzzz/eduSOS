@@ -16,6 +16,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="12dp"
+            android:tint="#757575"
             app:layout_constraintBottom_toBottomOf="@+id/expert_profile_splash"
             app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toTopOf="@+id/expert_profile_splash"

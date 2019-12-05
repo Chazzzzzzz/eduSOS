@@ -33,6 +33,7 @@ public class RegisterStudentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_student);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         dbStudents = FirebaseDatabase.getInstance().getReference("Students");
 

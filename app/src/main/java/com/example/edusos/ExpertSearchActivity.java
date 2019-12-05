@@ -33,6 +33,8 @@ public class ExpertSearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expert_search);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         searchBoxButton = findViewById(R.id.searchBoxButton);
         searchBox = findViewById(R.id.searchBox);

@@ -40,6 +40,7 @@ public class AnswerQuestionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer_question);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         dbQuestion = FirebaseDatabase.getInstance().getReference("question");
 

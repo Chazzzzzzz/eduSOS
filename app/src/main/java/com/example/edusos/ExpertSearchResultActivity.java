@@ -36,6 +36,8 @@ public class ExpertSearchResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expert_search_result);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         Intent intent = getIntent();
         String searchText = intent.getStringExtra("searchText");
