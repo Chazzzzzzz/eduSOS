@@ -67,17 +67,31 @@ public class ChatListActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull final chatViewHolder chatViewHolder, int i, @NonNull Chat chat) {
                 final String userID = chat.getUserID();
                 final String chatPartner = chat.getChatPartner();
-                chatViewHolder.userName.setText(chatPartner);
+                final String imageURL = chat.getPartnerImage();
+                final boolean partnerStatus = chat.getPartnerOnlineStatus();
+                final String partnerName;
+
+                if (chat.getPartnerName() != null) {
+                    partnerName = chat.getPartnerName();
+                } else {
+                    partnerName = chatPartner;
+                }
+
+                chatViewHolder.userName.setText(partnerName);
                 chatViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), ChatActivity.class);
                         if (userID.equals(curUserID)) {
-                            intent.putExtra("name", chatPartner);
+                            intent.putExtra("name", partnerName);
                             intent.putExtra("googleAcc", chatPartner);
+                            intent.putExtra("imageURL", imageURL);
+                            intent.putExtra("online", partnerStatus);
                         } else {
-                            intent.putExtra("name", userID);
+                            intent.putExtra("name", partnerName);
                             intent.putExtra("googleAcc", userID);
+                            intent.putExtra("imageURL", imageURL);
+
                         }
 
                         startActivity(intent);

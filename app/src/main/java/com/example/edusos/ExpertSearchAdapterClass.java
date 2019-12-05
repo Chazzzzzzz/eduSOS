@@ -113,6 +113,7 @@ public class ExpertSearchAdapterClass extends RecyclerView.Adapter<ExpertSearchA
                 notifyItemChanged(position);
             }
         });
+
         holder.mItemView.findViewById(R.id.chatButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,9 +121,12 @@ public class ExpertSearchAdapterClass extends RecyclerView.Adapter<ExpertSearchA
                 Intent intent = new Intent(view.getContext(), ChatActivity.class);
                 intent.putExtra("name", chosenExpert.getName());
                 intent.putExtra("googleAcc", chosenExpert.getGoogleAccount());
+                intent.putExtra("imageURL", chosenExpert.getImageURL());
+                intent.putExtra("online", chosenExpert.getOnline());
                 view.getContext().startActivity(intent);
             }
         });
+
         holder.mItemView.findViewById(R.id.emailButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -216,7 +220,7 @@ public class ExpertSearchAdapterClass extends RecyclerView.Adapter<ExpertSearchA
         }
 
         // When all async task done
-        protected void onPostExecute(Bitmap result){
+        protected void onPostExecute(Bitmap result) {
             if(result!=null){
                 // Display the downloaded image into ImageView
                 profileImageView.setImageBitmap(result);

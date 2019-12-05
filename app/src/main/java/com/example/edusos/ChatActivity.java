@@ -7,10 +7,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +32,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +58,8 @@ public class ChatActivity extends AppCompatActivity {
     private MessagesAdapterClass messagesAdapter;
     private RecyclerView userMsgList;
     private TextView ReceiverView;
+    private String imageURL;
+    private boolean onlineIndicator;
 
     private DatabaseReference rootRef;
 
@@ -63,6 +75,12 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ReceiverName = intent.getStringExtra("name");
         ReceiverID = intent.getStringExtra("googleAcc");
+        imageURL = intent.getStringExtra("imageURL");
+        onlineIndicator = intent.getBooleanExtra("online", false);
+
+        ImageView onlineIndicatorView = (ImageView) findViewById(R.id.chat_onlineIndicator);
+        ImageView profilePicture = (ImageView) findViewById(R.id.chat_profileImage);
+
         account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             Toast.makeText(this, "seems you don't log in", Toast.LENGTH_SHORT).show();
@@ -80,6 +98,11 @@ public class ChatActivity extends AppCompatActivity {
         SendMsgBtn = (ImageButton) findViewById(R.id.send_msg_btn);
         InputMsg = (EditText) findViewById(R.id.input_msg);
 
+        if (onlineIndicator) {
+            onlineIndicatorView.setImageResource(R.drawable.ic_online);
+        } else {
+            onlineIndicatorView.setImageResource(R.drawable.ic_offline);
+        }
         rootRef = FirebaseDatabase.getInstance().getReference();
 
         SendMsgBtn.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +118,12 @@ public class ChatActivity extends AppCompatActivity {
         userMsgList.setLayoutManager(linearLayoutManager);
         userMsgList.setAdapter(messagesAdapter);
 
+        if (imageURL == null) {
+            profilePicture.setVisibility(View.INVISIBLE);
+            onlineIndicatorView.setVisibility(View.INVISIBLE);
+        } else {
+            new ProfilePictureDownloadTask(profilePicture).execute(EduUtils.stringToURL(imageURL));
+        }
     }
 
     @Override
@@ -106,7 +135,6 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Messages messages = dataSnapshot.getValue(Messages.class);
-
                         messagesList.add(messages);
 
                         messagesAdapter.notifyDataSetChanged();
@@ -181,11 +209,15 @@ public class ChatActivity extends AppCompatActivity {
                         String chatPushID = chatPushRef.getKey();
                         Map chatBody = new HashMap();
                         chatBody.put("userID", SenderID);
+                        chatBody.put("partnerImage", imageURL);
+                        chatBody.put("partnerOnlineStatus", onlineIndicator);
                         chatBody.put("chatPartner", ReceiverID);
+                        chatBody.put("partnerName", ReceiverName);
                         Map chat = new HashMap();
                         chat.put(chatSenderRef + "/" + chatPushID, chatBody);
                         chat.put(chatReceiverRef + "/" + chatPushID, chatBody);
                         rootRef.updateChildren(chat);
+                        Log.d("CLARKCHAT", imageURL);
                     }
                 }
 
@@ -195,10 +227,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
 
-
-
-
-
         }
     }
+
 }
