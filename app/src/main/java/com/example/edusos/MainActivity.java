@@ -131,11 +131,14 @@ public class MainActivity extends AppCompatActivity {
             match = Boolean.FALSE;
             question = allQuestions.get(i);
             boolean topicMatches = false;
-            for (String topic:question.getTopics()) {
-                if (topic.toLowerCase().contains(searchText)) {
-                    topicMatches = true;
+            if (question.getTopics() != null) {
+                for (String topic:question.getTopics()) {
+                    if (topic.toLowerCase().contains(searchText)) {
+                        topicMatches = true;
+                    }
                 }
             }
+
             if (question.getQuestion().toLowerCase().contains(searchText)) {
                 matchedQuestions.add(allQuestions.get(i));
                 matchQuestionKeys.add(allQuestionKeys.get(i));
