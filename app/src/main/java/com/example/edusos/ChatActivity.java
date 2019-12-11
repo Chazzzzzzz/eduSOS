@@ -50,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
     private EditText InputMsg;
 
     private String SenderID;
+    private String SenderName;
     private String ReceiverID;
     private String ReceiverName;
 
@@ -74,6 +75,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ReceiverName = intent.getStringExtra("name");
+        SenderName = intent.getStringExtra("senderName");
         ReceiverID = intent.getStringExtra("googleAcc");
         imageURL = intent.getStringExtra("imageURL");
         onlineIndicator = intent.getBooleanExtra("online", false);
@@ -118,7 +120,7 @@ public class ChatActivity extends AppCompatActivity {
         userMsgList.setLayoutManager(linearLayoutManager);
         userMsgList.setAdapter(messagesAdapter);
 
-        if (imageURL == null) {
+        if (imageURL == null || imageURL.equals("")) {
             profilePicture.setVisibility(View.INVISIBLE);
             onlineIndicatorView.setVisibility(View.INVISIBLE);
         } else {
@@ -213,6 +215,7 @@ public class ChatActivity extends AppCompatActivity {
                         chatBody.put("partnerOnlineStatus", onlineIndicator);
                         chatBody.put("chatPartner", ReceiverID);
                         chatBody.put("partnerName", ReceiverName);
+                        chatBody.put("senderName", SenderName);
                         Map chat = new HashMap();
                         chat.put(chatSenderRef + "/" + chatPushID, chatBody);
                         chat.put(chatReceiverRef + "/" + chatPushID, chatBody);

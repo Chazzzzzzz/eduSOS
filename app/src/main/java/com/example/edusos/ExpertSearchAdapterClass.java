@@ -21,6 +21,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
@@ -118,8 +119,11 @@ public class ExpertSearchAdapterClass extends RecyclerView.Adapter<ExpertSearchA
             @Override
             public void onClick(View view) {
                 Expert chosenExpert = expertList.get(position);
+
+                GoogleSignInAccount userAccount = ((EduSOSApplication) view.getContext().getApplicationContext()).getAccount();
                 Intent intent = new Intent(view.getContext(), ChatActivity.class);
                 intent.putExtra("name", chosenExpert.getName());
+                intent.putExtra("senderName", userAccount.getDisplayName());
                 intent.putExtra("googleAcc", chosenExpert.getGoogleAccount());
                 intent.putExtra("imageURL", chosenExpert.getImageURL());
                 intent.putExtra("online", chosenExpert.getOnline());

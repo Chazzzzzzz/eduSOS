@@ -61,6 +61,8 @@ public class ChatListActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        final boolean isExpert = ((EduSOSApplication) getApplication()).getLoggedInAsExpert();
+        final GoogleSignInAccount googleAccount = ((EduSOSApplication) getApplication()).getAccount();
         FirebaseRecyclerOptions<Chat> options = new FirebaseRecyclerOptions.Builder<Chat>()
                 .setQuery(databaseReference, Chat.class)
                 .build();
@@ -74,6 +76,7 @@ public class ChatListActivity extends AppCompatActivity {
                 final String imageURLstring = chat.getPartnerImage();
                 final boolean partnerStatus = chat.getPartnerOnlineStatus();
                 final String partnerName;
+                final String userName = chat.getSenderName();
 
                 if (chat.getPartnerName() != null) {
                     partnerName = chat.getPartnerName();
@@ -81,34 +84,53 @@ public class ChatListActivity extends AppCompatActivity {
                     partnerName = chatPartner;
                 }
 
-                if (partnerStatus) {
-                    chatViewHolder.onlineStatus.setImageResource(R.drawable.ic_online);
-                } else {
-                    chatViewHolder.onlineStatus.setImageResource(R.drawable.ic_offline);
-                }
+                if (!isExpert) {
+                    chatViewHolder.userName.setText(partnerName);
+                    if (partnerStatus) {
+                        chatViewHolder.onlineStatus.setImageResource(R.drawable.ic_online);
+                    } else {
+                        chatViewHolder.onlineStatus.setImageResource(R.drawable.ic_offline);
+                    }
 
-                if (imageURLstring == null || imageURLstring.equals("")) {
+                    if (imageURLstring == null || imageURLstring.equals("")) {
+                        chatViewHolder.profileImage.setVisibility(View.INVISIBLE);
+                        chatViewHolder.onlineStatus.setVisibility(View.GONE);
+                    } else {
+                        URL imageURL = EduUtils.stringToURL(imageURLstring);
+                        new ProfilePictureDownloadTask(chatViewHolder.profileImage).execute(imageURL);
+                    }
+                } else {
                     chatViewHolder.profileImage.setVisibility(View.INVISIBLE);
-                    chatViewHolder.onlineStatus.setVisibility(View.INVISIBLE);
-                } else {
-                    URL imageURL = EduUtils.stringToURL(imageURLstring);
-                    new ProfilePictureDownloadTask(chatViewHolder.profileImage).execute(imageURL);
+                    chatViewHolder.onlineStatus.setVisibility(View.GONE);
+                    chatViewHolder.userName.setText(userName);
                 }
 
-                chatViewHolder.userName.setText(partnerName);
                 chatViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), ChatActivity.class);
                         if (userID.equals(curUserID)) {
-                            intent.putExtra("name", partnerName);
+                            if (isExpert) {
+                                intent.putExtra("name", userName);
+                                intent.putExtra("imageURL", "");
+                            } else {
+                                intent.putExtra("name", partnerName);
+                                intent.putExtra("imageURL", imageURLstring);
+                            }
                             intent.putExtra("googleAcc", chatPartner);
-                            intent.putExtra("imageURL", imageURLstring);
                             intent.putExtra("online", partnerStatus);
                         } else {
                             intent.putExtra("name", partnerName);
                             intent.putExtra("googleAcc", userID);
                             intent.putExtra("imageURL", imageURLstring);
+                            if (isExpert) {
+                                intent.putExtra("name", userName);
+                                intent.putExtra("imageURL", "");
+
+                            } else {
+                                intent.putExtra("name", partnerName);
+                                intent.putExtra("imageURL", imageURLstring);
+                            }
                         }
 
                         startActivity(intent);

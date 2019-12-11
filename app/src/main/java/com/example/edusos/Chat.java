@@ -5,14 +5,16 @@ public class Chat {
     private String chatPartner;
     private String partnerImage;
     private String partnerName;
+    private String senderName;
     private boolean partnerOnlineStatus;
 
-    public Chat(String userID, String chatPartner, String partnerImage, boolean partnerOnlineStatus, String partnerName) {
+    public Chat(String userID, String chatPartner, String partnerImage, boolean partnerOnlineStatus, String partnerName, String userName) {
         this.userID = userID;
         this.chatPartner = chatPartner;
         this.partnerImage = partnerImage;
         this.partnerOnlineStatus = partnerOnlineStatus;
         this.partnerName = partnerName;
+        this.senderName = senderName;
     }
 
     public Chat() {}
@@ -55,5 +57,13 @@ public class Chat {
 
     public void setPartnerName(String name) {
         this.partnerName = name;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String name) {
+        this.senderName = name;
     }
 }
