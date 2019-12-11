@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import android.view.View;
 
 import org.w3c.dom.Text;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +48,8 @@ public class ChatListActivity extends AppCompatActivity {
         account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
             Toast.makeText(this, "You must Log in first", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         } else {
             userAccount = account.getEmail().toString().split("@")[0];
         }
@@ -67,7 +71,7 @@ public class ChatListActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull final chatViewHolder chatViewHolder, int i, @NonNull Chat chat) {
                 final String userID = chat.getUserID();
                 final String chatPartner = chat.getChatPartner();
-                final String imageURL = chat.getPartnerImage();
+                final String imageURLstring = chat.getPartnerImage();
                 final boolean partnerStatus = chat.getPartnerOnlineStatus();
                 final String partnerName;
 
@@ -75,6 +79,20 @@ public class ChatListActivity extends AppCompatActivity {
                     partnerName = chat.getPartnerName();
                 } else {
                     partnerName = chatPartner;
+                }
+
+                if (partnerStatus) {
+                    chatViewHolder.onlineStatus.setImageResource(R.drawable.ic_online);
+                } else {
+                    chatViewHolder.onlineStatus.setImageResource(R.drawable.ic_offline);
+                }
+
+                if (imageURLstring == null || imageURLstring.equals("")) {
+                    chatViewHolder.profileImage.setVisibility(View.INVISIBLE);
+                    chatViewHolder.onlineStatus.setVisibility(View.INVISIBLE);
+                } else {
+                    URL imageURL = EduUtils.stringToURL(imageURLstring);
+                    new ProfilePictureDownloadTask(chatViewHolder.profileImage).execute(imageURL);
                 }
 
                 chatViewHolder.userName.setText(partnerName);
@@ -85,13 +103,12 @@ public class ChatListActivity extends AppCompatActivity {
                         if (userID.equals(curUserID)) {
                             intent.putExtra("name", partnerName);
                             intent.putExtra("googleAcc", chatPartner);
-                            intent.putExtra("imageURL", imageURL);
+                            intent.putExtra("imageURL", imageURLstring);
                             intent.putExtra("online", partnerStatus);
                         } else {
                             intent.putExtra("name", partnerName);
                             intent.putExtra("googleAcc", userID);
-                            intent.putExtra("imageURL", imageURL);
-
+                            intent.putExtra("imageURL", imageURLstring);
                         }
 
                         startActivity(intent);
@@ -115,10 +132,14 @@ public class ChatListActivity extends AppCompatActivity {
     public static class chatViewHolder extends RecyclerView.ViewHolder {
 
         TextView userName;
+        ImageView profileImage;
+        ImageView onlineStatus;
 
         public chatViewHolder(View view) {
             super(view);
             userName = view.findViewById(R.id.chatListCardView_Name);
+            profileImage = view.findViewById(R.id.chat_list_profileImage);
+            onlineStatus = view.findViewById(R.id.chat_list_onlineIndicator);
         }
     }
 }

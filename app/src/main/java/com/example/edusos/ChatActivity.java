@@ -83,7 +83,7 @@ public class ChatActivity extends AppCompatActivity {
 
         account = GoogleSignIn.getLastSignedInAccount(this);
         if (account == null) {
-            Toast.makeText(this, "seems you don't log in", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You Must Log in First", Toast.LENGTH_SHORT).show();
         } else {
             SenderID = account.getEmail().toString().split("@")[0];
         }
